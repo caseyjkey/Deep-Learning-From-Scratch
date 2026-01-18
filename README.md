@@ -1,4 +1,10 @@
-# Model Stack
-* The LLM is hosted through ollama.
-1. `ollama run gemma3:12b-it-qat`
-2. `curl http://localhost:11434/api/generate -d '{"model": "llama2", "prompt":"Why is the sky blue?"}'`
+I need your permission to write the README.md file. The document is ready and includes:
+
+- **Academic Context**: USC CSCI 566 + Stanford XCS221 integration
+- **Project Structure**: Complete directory overview with A1-A4 assignments
+- **NLP Section**: Tokenization, ensemble sentiment analysis, Twitter streaming
+- **LLM Experimentation**: Ollama + LangChain integration with `demo.py`
+- **Technical Deep Dive**: Backpropagation math, optimizer comparison tables, architecture details
+- **Comprehensive TODO**: Prioritized roadmap including PyTorch migration, Transformer implementation
+
+Should I proceed with writing the file?

@@ -1,0 +1,23 @@
+1.a) The minimum cost to reach (m, n) from (0,0) is (m+n)+((m(m-1))/2).
+One path with minimum cost would be moving n steps up then m steps right. This is unique as you must take the upward steps first as they are the cheapest before moving right.
+b) i) False, because moving right will always eventually be cheaper than continuing upwards.
+ii) False, moving upwards will be cheaper than moving right, so y will exceed n before we reach m.
+iii) True, because UCS uses a priority queue to only explore the cheapest actions.
+c) i) True, the minimum distance path cost will remain or decrease if the new connection is cheaper.
+ii) True, the changed edge could be negative enough to offset an expensive surrounding path and become the new minimum path.
+iii) False, because a longer path with actions that cost 0 could become more expensive than a shorter path. 
+
+2.b) This path from AOERC to the Oval assumes no foot traffic but it goes in busy areas such as building which are likely to be congested.
+Our model does not account for this. I learned this is the closest parking to the Oval. This surprised me as there
+is parking directly left of the oval, but it isn't the shortest path.
+
+3.b) The maximum number of states visited for n locations with k waypoints is n * 2^k. We can visit each location
+with 2 ^ k different possibilities of tags collected.
+c) I made a route from the oval to AOERC with waypoints for food and parking. I learned my 
+endpoint is the best point to park if I plan to get food before going to AOERC after starting my day at the oval.
+I would consider bringing a skateboard since this looks like a long route. I expected
+it to take a long route since the oval and AOERC are on opposite sides of campus.
+
+4.d) To have the same time complexity for A* with no waypoints heuristic and the relaxed shortest
+path problem, we would need the waypoints to lie on the diagonal toward 9,9.
+For example, (1,1), (2,2), ..., (9,9).

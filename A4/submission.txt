@@ -1,0 +1,34 @@
+1. Vminimax(s,d) = {
+    Utility(s): isEnd(s);
+    Eval(s): d = 0;
+    max(a in Actions(s))Vminimax(Succ(s, a), d): Player(s) = Pacman;
+    min(a in Actions(s))Vminimax(Succ((s + , a), d - (1/k)): Player(s) = Ghost;
+}
+
+3. Pi(s, a) = 1/|Actions(s)| 
+
+Vexpectimax(s, d) = {
+    Utility(s): isEnd(s);
+    Eval(s): d = 0;
+    max(a in Actions(s))Vexpectimax(Succ(s, a), d): Player(s) = Pacman;
+    sum(a in Actions(s))Pi(s, a) * Vexpectimax(Succ(s, a), d - 1/k): Player(s) = Ghost;
+}
+
+5. a) the MinimaxAgent's evaluation function returns the same value for all actions, so it chooses the first one.
+This action happens to be toward the nearest ghost. This is because Minimax assumes
+the opponent is playing optimially, which results in states that have no utility for the player.
+Expectimax changes this assumption, which results in actions with potential states that the player has utility, prioritizing those actions.
+
+b) We could make MinimaxAgent behave more like Expectimax by changing the evaluation function to consider pellet and capsule distance.
+This would work because actions that move toward the food would provide utility, instead of all actions for Pacman having no utility due to 
+Minimax selecting the optimal action for Ghosts.
+
+c) An example of reward hacking would be self-driving cars
+with an objective function for shortest trip time.
+This objective function could have side effects such as law breaking,
+damage to the vehicle, or injury to people.
+It would choose to go over/through obstacles at the fastest
+possible rate, and would over-exert the vehicle in pursuit
+of reaching the destination as fast as possible. A better reward hack for this 
+objective function would be exploding the car to make the passenger
+reach their destination the fastest.

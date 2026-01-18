@@ -1,0 +1,55 @@
+1.a) i = 0, Vopt(-2) = 0, Vopt(-1) = 0, Vopt(0) = 0, Vopt(1) = 0, Vopt(2) = 0
+
+i = 1, Vopt(-2) = max((0.8(10 + 0) + 0.2(-5 + 0)), (0.7(10 + 0) + 0.3(-5 + 0))) = max(7, 5.5) = 7
+Vopt(-1) = max(0.8(10 + 0) + 0.2(-5 + 0), 0.7(10 + 0) + 0.3(-5 + 0)) = max(7, 5.5) = 7
+Vopt(0) = max(0.8(-5 + 0) + 0.2(-5 + 0), 0.7(-5 + 0) + 0.3(-5 + 0)) = -5
+Vopt(1) = max(0.8(-5 + 0) + 0.2(50 + 0), 0.7(-5 + 0) + 0.3(50 + 0)) = max(6, 11.5) = 11.5
+Vopt(2) = max(0.8(-5 + 0) + 0.2(50 + 0), 0.7(-5 + 0) + 0.3(50 + 0)) = 11.5
+
+i = 2, Vopt(-2) = max(0.8(10 + 0) + 0.2(-5 + 7), 0.7(10 + 0) + 0.3(-5 + 7)) = max(8.4, 7.6) = 8.4
+Vopt(-1) = max(0.8(10 + 0) + 0.2(-5 + -5), 0.7(10 + 0) + 0.3(-5 + -5)) = max(6, 4) = 6
+Vopt(0) = max(0.8(-5 + 7) + 0.2(-5 + 11.5), 0.7(-5 + 7) + 0.3(-5 + 11.5)) = max(2.9, 3.35) = 3.35
+Vopt(1) = max(0.8(-5 + -5) + 0.2(50 + 0), 0.7(-5 + -5) + 0.3(50 + 0)) = max(2, 8) = 8
+Vopt(2) = max(0.8(-5 + 11.5) + 0.2(50 + 0), 0.7(-5 + 11.5) + 0.3(50 + 0)) = max(15.2, 19.55) = 19.55
+
+b) Optimal policy: π*(-1) = a1, π*(0) = a2, π*(1) = a2
+
+2. a) To make an MDP with a learning rate, lambda, that is less than one
+work for an MDP solver that requires a learning rate of 1. We can add
+an absorption state, o, which has T(o, a, o) = 1 and R(o, a, o) = 0 to discount each state.
+We can implement this for a simple MDP with one state, s1, and one action, a1 = Stay.
+Since we have one action, Vopt(s1) = T(s1, a1, s1)*R(s1, a1, s1) + lambda*Vopt^t-1(s1).
+We can rewrite this to V'opt(s1) to have a learning rate of 1 by moving the lambda term to the transition function, and add
+a transition and reward function for o so the transition probability totals to the original probability and expected reward remains the same.
+T'(s, a, o) = 1 - lambda
+T'(s, a, s) = lambda * T(s, a, s)
+R'(s, a, o) = 0
+R'(s, a, s) = R(s, a, s)
+This satisfies the bellman equation for the simple MDP, and it also works for more complex cases.
+
+3. c) Our plot when training a model for our MDP using value iteration shows the agent learning to avoid the negative reward states and converge toward the average of the positive reward states.
+The agent achieves an average of two reward states, and during training it eventually does not encounter any reward states less than -400.
+However, during eval it does visit reward states of -600, showing we encounter states not modeled in our training.
+This shows a weakness in value iteration for MDPs when the model is incomplete or has inaccurate transition possibilites.
+
+4. d) Tabular Q-learning achieves the optimal policy around iteration 750. Function approximation
+achieves its peak moving average earlier at around iteration 600. Function approximation's moving average has a lower peak at around -250 than tabular Q-learning's peak of approximately -150.
+I believe this is due to tabular Q-learning ability to converge to the true Q-function with enough iterations or exploration,
+whereas function approximation generalizes broadly across states.
+e) Function approximation is beneficial in the mountain car experiment because it can generalize across states and find a "good-enough" solution faster than tabular Q-learning.
+Also, it is more space-efficient for large state spaces because it doesn't need to store a value for every discrete state.
+If we can't explore all states, function approximation will more likely perform better than tabular Q-learning.
+
+5. a) The max_speed value is used to clip the car's velocity, limiting the range where it can reach the maximum positions.
+b) Removing the velocity constraint does not affect the output behavior
+because it does not create more optimal states.
+c) The two scenarios differ because a larger max speed increases the range of inputs to reach the goal position, requiring more control effort.
+d) An MDP for exploring residential neighborhoods using state = (position, velocity), actions = (accelerate, brake, idle, turn angle), and a reward function Reward(s, a, s') = 100 if isEnd(state) else -1.
+The policy could be pi(state) = argmax_a Q(state, a).
+This could potentially cause harm to humans because it does not consider whether it is on the road or if there are people in the way.
+The beneficience principle would be violated as the model could do harm.
+
+4. d) Tabular Q-learning achieves the optimal policy around iteration 750. Function approximation
+achieves its peak moving average earlier at around iteration 600. It has a lower peak than tabular Q-learning.
+However, it reaches more optimal policies. I believe this is due to tabular Q-learning exploiting less optimal paths,
+whereas function approximation explores more broadly and finds better long-term strategies.

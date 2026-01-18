@@ -1,3 +1,6 @@
 [submodule "assignments/assignments/1/ML"]
 	path = assignments/assignments/1/ML
 	url = git@github.com:jtyndale9/ML.git
+[submodule "twitter-sentiment-analysis"]
+	path = twitter-sentiment-analysis
+	url = git@github.com:caseyjkey/twitter-sentiment-analysis.git

@@ -4,3 +4,6 @@
 [submodule "twitter-sentiment-analysis"]
 	path = twitter-sentiment-analysis
 	url = git@github.com:caseyjkey/twitter-sentiment-analysis.git
+[submodule "Ex-Machina"]
+	path = Ex-Machina
+	url = git@github.com:caseyjkey/Ex-Machina.git

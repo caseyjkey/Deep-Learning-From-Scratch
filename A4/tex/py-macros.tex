@@ -1,0 +1,18 @@
+
+\usepackage{xstring}
+\newcommand{\points}[1]{
+  \IfEqCase{#1}{
+    {1a}{\textbf{[4 points (Written)]}}
+    {1b}{\textbf{[10 points (Coding)]}}
+    {2a}{\textbf{[17 points (Coding)]}}
+    {3a}{\textbf{[5 points (Written)]}}
+    {3b}{\textbf{[16 points (Coding)]}}
+    {4a}{\textbf{[5 points (Coding, Extra Credit)]}}
+    {4b}{\textbf{[0 points (Written, Extra Credit)]}}
+    {5a}{\textbf{[1 point (Written)]}}
+    {5b}{\textbf{[1 point (Written)]}}
+    {5c}{\textbf{[1 point (Written)]}}
+
+  }[\PackageError{points}{Cannot assign point value to unknown question: #1}{}]
+}
+\def\due{Sunday, January 11 at 11:59pm PT}

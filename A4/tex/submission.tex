@@ -1,0 +1,114 @@
+% This contents of this file will be inserted into the _Solutions version of the
+% output tex document.  Here's an example:
+
+% If assignment with subquestion (1.a) requires a written response, you will
+% find the following flag within this document: <SCPD_SUBMISSION_TAG>_1a
+% In this example, you would insert the LaTeX for your solution to (1.a) between
+% the <SCPD_SUBMISSION_TAG>_1a flags.  If you also constrain your answer between the
+% START_CODE_HERE and END_CODE_HERE flags, your LaTeX will be styled as a
+% solution within the final document.
+
+% Please do not use the '<SCPD_SUBMISSION_TAG>' character anywhere within your code.  As expected,
+% that will confuse the regular expressions we use to identify your solution.
+
+\def\assignmentnum{4 }
+\def\assignmentname{Pacman}
+\def\assignmenttitle{XCS221 Assignment \assignmentnum --- \assignmentname}
+\input{macros}
+\begin{document}
+\pagestyle{myheadings} \markboth{}{\assignmenttitle}
+
+% <SCPD_SUBMISSION_TAG>_entire_submission
+
+This handout includes space for every question that requires a written response.
+Please feel free to use it to handwrite your solutions (legibly, please).  If
+you choose to typeset your solutions, the |README.md| for this assignment includes
+instructions to regenerate this handout with your typeset \LaTeX{} solutions.
+\ruleskip
+
+\LARGE
+1.a
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_1a
+\begin{answer}
+  % ### START CODE HERE ###
+$$
+V_{minimax}(s,d) = \begin{cases}
+    Utility(s) & \text{if } isEnd(s) \\
+    Eval(s) & \text{if } d = 0 \\
+    \max_{a \in Actions(s)} V_{minimax}(Succ(s, a), d) & \text{if } Player(s) = \text{Pacman} \\
+    \min_{a \in Actions(s)} V_{minimax}(Succ(s, a), d - \frac{1}{k}) & \text{if } Player(s) = \text{Ghost}
+\end{cases}
+$$
+% ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_1a
+\clearpage
+
+\LARGE
+3.a
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_3a
+\begin{answer}
+  % ### START CODE HERE ###
+$$
+\Pi(s, a) = \frac{1}{\lvert Actions(s) \rvert}
+$$
+$$
+V_{expectimax}(s, d) = \begin{cases}
+    Utility(s) & \text{if } isEnd(s) \\
+    Eval(s) & \text{if } d = 0 \\
+    \max_{a \in Actions(s)} V_{expectimax}(Succ(s, a), d) & \text{if } Player(s) = \text{Pacman} \\
+    \sum_{a \in Actions(s)} \Pi(s, a) \cdot V_{expectimax}(Succ(s, a), d - \frac{1}{k}) & \text{if } Player(s) = \text{Ghost}
+\end{cases}
+$$
+% ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_3a
+\clearpage
+
+
+\LARGE
+5.a
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_5a
+\begin{answer}
+  % ### START CODE HERE ###
+The MinimaxAgent's evaluation function returns the same value for all actions, so it chooses the first one. This action happens to be toward the nearest ghost. This is because Minimax assumes the opponent is playing optimally, which results in states that have no utility for the player. Expectimax changes this assumption, which results in actions with potential states that the player has utility, prioritizing those actions.
+% ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_5a
+\clearpage
+
+\LARGE
+5.b
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_5b
+\begin{answer}
+  % ### START CODE HERE ###
+We could make MinimaxAgent behave more like Expectimax by changing the evaluation function to consider pellet and capsule distance. This would work because actions that move toward the food would provide utility, instead of all actions for Pacman having no utility due to Minimax selecting the optimal action for Ghosts.
+% ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_5b
+\clearpage
+
+\LARGE
+5.c
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_5c
+\begin{answer}
+  % ### START CODE HERE ###
+An example of reward hacking would be self-driving cars with an objective function for shortest trip time. This objective function could have side effects such as law breaking, damage to the vehicle, or injury to people. It would choose to go over/through obstacles at the fastest possible rate, and would over-exert the vehicle in pursuit of reaching the destination as fast as possible. A better reward hack for this objective function would be exploding the car to make the passenger reach their destination the fastest.
+% ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_5c
+\clearpage
+
+% <SCPD_SUBMISSION_TAG>_entire_submission
+
+\end{document}

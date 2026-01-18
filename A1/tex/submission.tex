@@ -1,0 +1,258 @@
+% This contents of this file will be inserted into the _Solutions version of the
+% output tex document.  Here's an example:
+
+% If assignment with subquestion (1.a) requires a written response, you will
+% find the following flag within this document: <SCPD_SUBMISSION_TAG>_1a
+% In this example, you would insert the LaTeX for your solution to (1.a) between
+% the <SCPD_SUBMISSION_TAG>_1a flags.  If you also constrain your answer between the
+% START_CODE_HERE and END_CODE_HERE flags, your LaTeX will be styled as a
+% solution within the final document.
+
+% Please do not use the '<SCPD_SUBMISSION_TAG>' character anywhere within your code.  As expected,
+% that will confuse the regular expressions we use to identify your solution.
+
+\def\assignmentnum{1 }
+\def\assignmentname{Sentiment Analysis}
+\def\assignmenttitle{XCS221 Assignment \assignmentnum --- \assignmentname}
+\input{macros}
+\begin{document}
+\pagestyle{myheadings} \markboth{}{\assignmenttitle}
+
+% <SCPD_SUBMISSION_TAG>_entire_submission
+
+This handout includes space for every question that requires a written response.
+Please feel free to use it to handwrite your solutions (legibly, please).  If
+you choose to typeset your solutions, the |README.md| for this assignment includes
+instructions to regenerate this handout with your typeset \LaTeX{} solutions.
+\ruleskip
+
+\LARGE
+1.e
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_1e
+\begin{answer}
+  % ### START CODE HERE ###
+  The best value of $n$ I found is $7$.
+
+It had a validation error of approximately $0.270$ compared to the word extractor with a validation error of approximately $0.275$. I believe this is because the average length of words used in reviews is 7, so it mimics the word extractor. Small values of $n$ (e.g., $2$) and large values (e.g., $15$) had similar performance. This supports my hypothesis that $n$ must be near the average word length to achieve a validation error similar to the word feature extractor.
+
+A movie review where $n$-grams would likely outperform word features would be:
+
+\begin{quote}
+``I didn't enjoy this movie! I would not recommend this movie. It is not good.''
+\end{quote}
+
+$n$-grams outperform word features here because they capture context words like ``didn't'' and ``not'' that negate the positive words following them.
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_1e
+\clearpage
+
+\LARGE
+2.a
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_2a
+\begin{answer}
+  % ### START CODE HERE ###
+  Points: [10, 0], [30, 0], [10, 20], [20, 20]
+\subsection*{(i)}
+
+\textbf{Iteration 1:} Centroids $\mu_1 = [20, 30]$, $\mu_2 = [20, -10]$
+
+\begin{itemize}
+    \item $[10,0] \to 2$
+    \[
+    d_1 = \sqrt{(20 - 10)^2 + (30 - 0)^2} \approx 31.62,\quad
+    d_2 = \sqrt{(20 - 10)^2 + (-10 - 0)^2} \approx 14.14
+    \]
+    
+    \item $[30,0] \to 2$
+    \[
+    d_1 = \sqrt{(20 - 30)^2 + (30 - 0)^2} \approx 31.62,\quad
+    d_2 = \sqrt{(20 - 30)^2 + (-10 - 0)^2} \approx 14.14
+    \]
+
+    \item $[10,20] \to 1$
+    \[
+    d_1 = \sqrt{(20 - 10)^2 + (30 - 20)^2} \approx 14.14,\quad
+    d_2 = \sqrt{(20 - 10)^2 + (-10 - 20)^2} \approx 31.62
+    \]
+
+    \item $[20,20] \to 1$
+    \[
+    d_1 = \sqrt{(20 - 20)^2 + (30 - 20)^2} = 10,\quad
+    d_2 = \sqrt{(20 - 20)^2 + (-10 - 20)^2} = 30
+    \]
+\end{itemize}
+
+\textbf{Updated centroids:}
+
+\[
+\mu_1 = \left[\frac{10 + 20}{2}, \frac{20 + 20}{2}\right] = [15, 20],\quad
+\mu_2 = \left[\frac{30 + 10}{2}, \frac{0 + 0}{2}\right] = [20,0]
+\]
+
+\textbf{Loss:}
+\[
+14.14^2 + 14.14^2 + 14.14^2 + 10^2 \approx 699.8188
+\]
+
+\bigskip
+
+\noindent \textbf{Iteration 2:} Centroids $\mu_1 = [15, 20]$, $\mu_2 = [20,0]$
+
+\begin{itemize}
+    \item $[10,0] \to 2$
+    \[
+    d_1 = \sqrt{(15-10)^2 + (20-0)^2} \approx 20.61,\quad
+    d_2 = \sqrt{(20-10)^2 + (0-0)^2} = 10
+    \]
+
+    \item $[30,0] \to 2$
+    \[
+    d_1 = \sqrt{(15-30)^2 + (20-0)^2} = 25,\quad
+    d_2 = \sqrt{(20-30)^2 + (0-0)^2} = 10
+    \]
+
+    \item $[10,20] \to 1$
+    \[
+    d_1 = \sqrt{(15-10)^2 + (20-20)^2} = 5,\quad
+    d_2 = \sqrt{(20-10)^2 + (0-20)^2} \approx 22.36
+    \]
+
+    \item $[20,20] \to 1$
+    \[
+    d_1 = \sqrt{(15-20)^2 + (20-20)^2} = 5,\quad
+    d_2 = \sqrt{(20-20)^2 + (0-20)^2} = 20
+    \]
+\end{itemize}
+
+\textbf{Updated centroids:}
+
+\[
+\mu_1 = [15,20],\quad \mu_2 = [20,0]
+\]
+
+\textbf{Loss:}
+\[
+10^2 + 10^2 + 5^2 + 5^2 = 250
+\]
+
+\bigskip
+
+\noindent \textbf{Iteration 3:} Centroids unchanged $\mu_1 = [15,20]$, $\mu_2 = [20,0]$
+
+Distances and assignments remain the same.
+
+\textbf{Loss:}
+\[
+10^2 + 10^2 + 5^2 + 5^2 = 250
+\]
+
+
+\subsection*{(ii)}
+
+\textbf{Iteration 1:} Initial centroids $\mu_1 = [0, 10]$ and $\mu_2 = [30, 20]$
+
+\begin{itemize}
+    \item $[10, 0] \to 1$
+    \[
+    d_1 = \sqrt{(0 - 10)^2 + (10 - 0)^2} = 14.14,\qquad
+    d_2 = \sqrt{(30 - 10)^2 + (20 - 0)^2} \approx 28.28
+    \]
+
+    \item $[30, 0] \to 2$
+    \[
+    d_1 = \sqrt{(0 - 30)^2 + (10 - 0)^2} \approx 31.62,\qquad
+    d_2 = \sqrt{(30 - 30)^2 + (20 - 0)^2} = 20
+    \]
+
+    \item $[10, 20] \to 1$
+    \[
+    d_1 = \sqrt{(0 - 10)^2 + (10 - 20)^2} \approx 14.14,\qquad
+    d_2 = \sqrt{(30 - 10)^2 + (20 - 20)^2} = 20
+    \]
+
+    \item $[20, 20] \to 2$
+    \[
+    d_1 = \sqrt{(0 - 20)^2 + (10 - 20)^2} \approx 22.36,\qquad
+    d_2 = \sqrt{(30 - 20)^2 + (20 - 20)^2} = 10
+    \]
+\end{itemize}
+
+\textbf{Updated centroids:}
+
+\[
+\mu_1 = \left[\frac{10 + 10}{2},\ \frac{0 + 20}{2}\right] = [10, 10]
+\]
+\[
+\mu_2 = \left[\frac{30 + 20}{2},\ \frac{0 + 20}{2}\right] = [25, 10]
+\]
+
+\textbf{Loss:}
+\[
+14.14^2 + 20^2 + 14.14^2 + 10^2 \approx 899.8792
+\]
+
+\bigskip
+
+\noindent \textbf{Iteration 2:} Centroids $\mu_1 = [10, 10]$, $\mu_2 = [25, 10]$
+
+\begin{itemize}
+    \item $[10, 0] \to 1$
+    \[
+    d_1 = \sqrt{(10 - 10)^2 + (10 - 0)^2} = 10,\qquad
+    d_2 = \sqrt{(25 - 10)^2 + (10 - 0)^2} \approx 18.03
+    \]
+
+    \item $[30, 0] \to 2$
+    \[
+    d_1 = \sqrt{(10 - 30)^2 + (10 - 0)^2} \approx 22.36,\qquad
+    d_2 = \sqrt{(25 - 30)^2 + (10 - 0)^2} \approx 11.18
+    \]
+
+    \item $[10, 20] \to 1$
+    \[
+    d_1 = \sqrt{(10 - 10)^2 + (10 - 20)^2} = 10,\qquad
+    d_2 = \sqrt{(25 - 10)^2 + (10 - 20)^2} \approx 18.03
+    \]
+
+    \item $[20, 20] \to 2$
+    \[
+    d_1 = \sqrt{(10 - 20)^2 + (10 - 20)^2} \approx 14.14,\qquad
+    d_2 = \sqrt{(25 - 20)^2 + (10 - 20)^2} \approx 11.18
+    \]
+\end{itemize}
+
+
+\textbf{Updated centroids:}
+
+\[
+\mu_1 = \left[\frac{10 + 10}{2},\ \frac{0 + 20}{2}\right] = [10, 10]
+\]
+\[
+\mu_2 = \left[\frac{30 + 20}{2},\ \frac{0 + 20}{2}\right] = [25, 10]
+\]
+
+\textbf{Loss:}
+\[
+10^2 + 11.18^2 + 10^2 + 11.18^2 \approx 449.9848
+\]
+
+\bigskip
+
+\noindent \textbf{Iteration 3:} Same calculations as Iteration 2.
+
+\textbf{Loss remains:}
+\[
+449.9848
+\]
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_2a
+\clearpage
+
+% <SCPD_SUBMISSION_TAG>_entire_submission
+\end{document}

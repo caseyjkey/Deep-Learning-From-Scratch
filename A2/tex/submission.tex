@@ -1,0 +1,147 @@
+% This contents of this file will be inserted into the _Solutions version of the
+% output tex document.  Here's an example:
+
+% If assignment with subquestion (1.a) requires a written response, you will
+% find the following flag within this document: <SCPD_SUBMISSION_TAG>_1a
+% In this example, you would insert the LaTeX for your solution to (1.a) between
+% the <SCPD_SUBMISSION_TAG>_1a flags.  If you also constrain your answer between the
+% START_CODE_HERE and END_CODE_HERE flags, your LaTeX will be styled as a
+% solution within the final document.
+
+% Please do not use the '<SCPD_SUBMISSION_TAG>' character anywhere within your code.  As expected,
+% that will confuse the regular expressions we use to identify your solution.
+
+\def\assignmentnum{2 }
+\def\assignmentname{Route Planning}
+\def\assignmenttitle{XCS221 Assignment \assignmentnum --- \assignmentname}
+\input{macros}
+\begin{document}
+\pagestyle{myheadings} \markboth{}{\assignmenttitle}
+
+% <SCPD_SUBMISSION_TAG>_entire_submission
+
+This handout includes space for every question that requires a written response.
+Please feel free to use it to handwrite your solutions (legibly, please).  If
+you choose to typeset your solutions, the |README.md| for this assignment includes
+instructions to regenerate this handout with your typeset \LaTeX{} solutions.
+\ruleskip
+
+\LARGE
+1.a
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_1a
+\begin{answer}
+
+    The minimum cost to reach $(m,n)$ from $(0,0)$ is
+    \[
+        (m+n) + \frac{m(m-1)}{2}.
+    \]
+    One minimum--cost path is to move $n$ steps up, then $m$ steps right.  
+    This is unique because the upward steps are always cheaper and must be taken first before moving right.
+
+
+
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_1a
+\clearpage
+
+\LARGE
+1.b
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_1b
+\begin{answer}
+    \begin{enumerate}
+        \item[i)] False, because moving right will always eventually be cheaper than continuing upwards.
+        \item[ii)] False, since moving upwards is cheaper than moving right, so $y$ will exceed $n$ before reaching $m$.
+        \item[iii)] True, because UCS uses a priority queue to explore only the cheapest actions first.
+    \end{enumerate}
+
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_1b
+\clearpage
+
+\LARGE
+1.c
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_1c
+\begin{answer}
+  % ### START CODE HERE ###
+      \begin{enumerate}
+        \item[i)] True, since the minimum--distance path cost will remain the same or decrease if the new edge is cheaper.
+        \item[ii)] True, because the changed edge might become negative enough to offset the surrounding path and become the new minimum.
+        \item[iii)] False, since a longer path with zero--cost actions could become more expensive than a shorter path.
+    \end{enumerate}
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_1c
+\clearpage
+
+\LARGE
+2.b
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_2b
+\begin{answer}
+  % ### START CODE HERE ###
+  The path from AOERC to the Oval assumes no foot traffic, but it goes through busy areas such as buildings that are likely to be congested.  
+    Our model does not account for this. I learned this is the closest parking to the Oval, which surprised me because there is parking left of the Oval, but it is not part of the shortest path.
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_2b
+\clearpage
+
+\LARGE
+3.b
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_3b
+\begin{answer}
+  % ### START CODE HERE ###
+   The maximum number of states visited for $n$ locations with $k$ waypoints is
+    \[
+        n \cdot 2^k.
+    \]
+    We can visit each location with $2^k$ different possibilities for which tags have been collected.
+
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_3b
+\clearpage
+
+\LARGE
+3.c
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_3c
+\begin{answer}
+  % ### START CODE HERE ###
+  I made a route from the Oval to AOERC with waypoints for food and parking.  
+    I learned that my endpoint is the best place to park if I plan to get food before going to AOERC after starting my day at the Oval.  
+    I might consider bringing a skateboard since this appears to be a long route.  
+    I expected it to be long because the Oval and AOERC are on opposite sides of campus.
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_3c
+\clearpage
+
+\LARGE
+4.d
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_4d
+\begin{answer}
+  % ### START CODE HERE ###
+  To have the same time complexity for A* with the no-waypoints heuristic and the relaxed shortest--path problem,  
+    the waypoints must lie along the diagonal toward $(9,9)$.  
+    For example: $(1,1), (2,2), \ldots, (9,9)$.
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_4d
+\clearpage
+
+% <SCPD_SUBMISSION_TAG>_entire_submission
+
+\end{document}

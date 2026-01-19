@@ -149,68 +149,79 @@ class BacktrackingSearch():
         ordered_values = self.domains[var]
 
         # Continue the backtracking recursion using |var| and |ordered_values|.
-        if not self.ac3:
-            # When arc consistency check is not enabled.
+        if self.ac3:
             for val in ordered_values:
                 deltaWeight = self.get_delta_weight(assignment, var, val)
                 if deltaWeight > 0:
                     assignment[var] = val
+                    localCopy = copy.deepcopy(self.domains)
+                    self.domains[var] = [val]
+                    self.arc_consistency_check(var)
                     self.backtrack(assignment, numAssigned + 1, weight * deltaWeight)
+                    self.domains = localCopy
+                    del assignment[var]
+        elif self.mcv:
+            for val in ordered_values:
+                deltaWeight = self.get_delta_weight(assignment, var, val)
+                if deltaWeight > 0:
+                    assignment[var] = val
+                    localCopy = copy.deepcopy(self.domains)
+
+                    for var2 in self.csp.variables:
+                        if var2 not in assignment and var2 != var:
+                            if var2 in self.csp.binaryFactors[var]:
+                                factor = self.csp.binaryFactors[var][var2]
+                                values_to_remove = []
+                                for val2 in self.domains[var2]:
+                                    if factor[val][val2] == 0:
+                                        values_to_remove.append(val2)
+                                for val2 in values_to_remove:
+                                    self.domains[var2].remove(val2)
+
+                    self.backtrack(assignment, numAssigned + 1, weight * deltaWeight)
+                    self.domains = localCopy
                     del assignment[var]
         else:
-            # Arc consistency check is enabled.
             for val in ordered_values:
                 deltaWeight = self.get_delta_weight(assignment, var, val)
                 if deltaWeight > 0:
                     assignment[var] = val
-                    # create a deep copy of domains as we are going to look
-                    # ahead and change domain values
-                    localCopy = copy.deepcopy(self.domains)
-                    # fix value for the selected variable so that hopefully we
-                    # can eliminate values for other variables
-                    self.domains[var] = [val]
-
-                    # enforce arc consistency
-                    self.arc_consistency_check(var)
-
                     self.backtrack(assignment, numAssigned + 1, weight * deltaWeight)
-                    # restore the previous domains
-                    self.domains = localCopy
                     del assignment[var]
 
     def get_unassigned_variable(self, assignment):
-        """
-        Given a partial assignment, return a currently unassigned variable.
-
-        @param assignment: A dictionary of current assignment. This is the same as
-            what you've seen so far.
-
-        @return var: a currently unassigned variable.
-        """
+        if not hasattr(self, 'var_to_idx'):
+            self.var_to_idx = {v: i for i, v in enumerate(self.csp.variables)}
 
         if not self.mcv:
-            # Select a variable without any heuristics.
-            for var in self.csp.variables:
-                if var not in assignment: return var
-        else:
-            min_var = None
-            min_count = float('inf')
-            
             for var in self.csp.variables:
                 if var not in assignment:
-                    # Use original domain size for MCV (before any pruning)
-                    domain_size = len(self.csp.values[var])
-                    
-                    if domain_size < min_count:
-                        min_count = domain_size
+                    return var
+        else:
+            min_var = None
+            min_domain = float('inf')
+            max_degree = -1
+
+            for var in self.csp.variables:
+                if var in assignment:
+                    continue
+
+                domain_size = len(self.domains[var])
+
+                if domain_size < min_domain:
+                    min_domain = domain_size
+                    min_var = var
+                    max_degree = len(self.csp.binaryFactors[var])
+
+                elif domain_size == min_domain:
+                    degree = len(self.csp.binaryFactors[var])
+                    if degree > max_degree:
+                        max_degree = degree
                         min_var = var
-                    elif domain_size == min_count and min_var is not None:
-                        # Tie-breaking: use variable order in CSP
-                        if self.csp.variables.index(var) < self.csp.variables.index(min_var):
+                    elif degree == max_degree:
+                        if self.var_to_idx[var] > self.var_to_idx[min_var]:
                             min_var = var
-                    elif min_var is None:
-                        min_var = var
-            
+
             return min_var
 
     def arc_consistency_check(self, var):
@@ -241,52 +252,41 @@ class BacktrackingSearch():
                     queue.append((var3, var1))
 
 def get_sum_variable(csp, name, variables, maxSum):
-    """
-    Given a list of |variables| each with non-negative integer domains,
-    returns the name of a new variable with domain range(0, maxSum+1), such that
-    it's consistent with the value |n| iff the assignments for |variables|
-    sums to |n|.
-
-    @param name: Prefix of all the variables that are going to be added.
-        Can be any hashable objects. For every variable |var| added in this
-        function, it's recommended to use a naming strategy such as
-        ('sum', |name|, |var|) to avoid conflicts with other variable names.
-    @param variables: A list of variables that are already in the CSP that
-        have non-negative integer values as its domain.
-    @param maxSum: An integer indicating the maximum sum value allowed. You
-        can use it to get the auxiliary variables' domain
-
-    @return result: The name of a newly created variable with domain range
-        [0, maxSum] such that it's consistent with an assignment of |n|
-        iff the assignment of |variables| sums to |n|.
-    """
     result = ('sum', name, 'total')
     csp.add_variable(result, [i for i in range(maxSum + 1)])
-    
+
     if len(variables) == 0:
         csp.add_unary_factor(result, lambda val: val == 0)
         return result
-    
+
     if len(variables) == 1:
         csp.add_binary_factor(variables[0], result, lambda x, r: r == x)
         return result
-    
-    # Simple incremental sum approach
-    sum_vars = []
+
+    aux_name = ('sum', name, 'aux')
+    aux_domain = []
+
+    def generate_combinations(idx, current_sum, current_vals):
+        if idx == len(variables):
+            aux_domain.append(tuple(current_vals + [current_sum]))
+            return
+
+        var = variables[idx]
+        for val in csp.values[var]:
+            new_sum = current_sum + val
+            if new_sum <= maxSum:
+                generate_combinations(idx + 1, new_sum, current_vals + [val])
+
+    generate_combinations(0, 0, [])
+    csp.add_variable(aux_name, aux_domain)
+
     for i, var in enumerate(variables):
-        sum_i = ('sum', name, i)
-        sum_vars.append(sum_i)
-        csp.add_variable(sum_i, [j for j in range(maxSum + 1)])
-        
-        if i == 0:
-            csp.add_binary_factor(var, sum_i, lambda x, s: s == x)
-        else:
-            prev_sum = sum_vars[i-1]
-            csp.add_binary_factor(prev_sum, sum_i, 
-                lambda s_prev, s_curr: 
-                any(s_prev + val == s_curr for val in csp.values[var]))
-    
-    csp.add_binary_factor(sum_vars[-1], result, lambda s, r: s == r)
+        def make_link(idx):
+            return lambda v, aux: aux[idx] == v
+        csp.add_binary_factor(var, aux_name, make_link(i))
+
+    csp.add_binary_factor(result, aux_name, lambda r, aux: aux[-1] == r)
+
     return result
 
 # importing get_or_variable helper function from util
@@ -432,44 +432,26 @@ class SchedulingCSPConstructor():
                         csp.add_binary_factor(orVar, v, lambda o, val: not val or o)
 
     def add_unit_constraints(self, csp):
-        """
-        Add constraint to the CSP to ensure that the total number of units are
-        within profile.minUnits/maxUnits, inclusively. The allowed range for
-        each course can be obtained from bulletin.courses[cid].minUnits/maxUnits.
-        For a request 'A or B', if you choose to take A, then you must use a unit
-        number that's within the range of A. You should introduce any additional
-        variables that you need. In order for our solution extractor to
-        obtain the number of units, for every requested course, you must have
-        a variable named (courseId, quarter) (e.g. ('CS221', 'Aut2013')) and
-        its assigned value is the number of units.
-        You should take advantage of get_sum_variable().
-
-        @param csp: The CSP where the additional constraints will be added to.
-        """
         for quarter in self.profile.quarters:
             unit_vars = []
 
             for request in self.profile.requests:
-                unit_var = (request, quarter, 'units')
-
-                domain = {0}
-                for cid in request.cids:
-                    course = self.bulletin.courses[cid]
-                    domain |= set(range(course.minUnits, course.maxUnits + 1))
-
-                domain = sorted(domain)
-                csp.add_variable(unit_var, domain)
-                unit_vars.append(unit_var)
-
                 req_var = (request, quarter)
 
-                csp.add_binary_factor(
-                    req_var,
-                    unit_var,
-                    lambda cid, units, bulletin=self.bulletin:
-                        units == 0 if cid is None
-                        else bulletin.courses[cid].minUnits <= units <= bulletin.courses[cid].maxUnits
-                )
+                for cid in request.cids:
+                    unit_var = (cid, quarter)
+                    course = self.bulletin.courses[cid]
+                    domain = [0] + list(range(course.minUnits, course.maxUnits + 1))
+                    csp.add_variable(unit_var, domain)
+                    unit_vars.append(unit_var)
+
+                    def link_units(r_cid, units, course_cid=cid, min_units=course.minUnits, max_units=course.maxUnits):
+                        if r_cid == course_cid:
+                            return min_units <= units <= max_units
+                        else:
+                            return units == 0
+
+                    csp.add_binary_factor(req_var, unit_var, link_units)
 
             total_units_var = get_sum_variable(
                 csp,

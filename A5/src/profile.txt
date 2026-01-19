@@ -1,0 +1,9 @@
+minUnits 3
+maxUnits 10
+
+register Aut2026
+register Win2027
+
+request CS106A
+request CS105
+request CS101

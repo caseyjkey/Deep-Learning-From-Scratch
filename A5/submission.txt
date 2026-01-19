@@ -45,4 +45,23 @@ X2 {0}
 7. backtrack({X1: 1, X3: 1, X2: 0})
     solution: (1, 0, 1)
 
-1. 
+2.d. Yes, my profile.txt generates a reasonable schedule. It abides y the max units counts and assigns a course for both quarters using my preferred courses.
+Profile.txt
+minUnits 3
+maxUnits 10
+
+register Aut2026
+register Win2027
+
+request CS106A
+request CS105
+request CS101
+
+Schedule
+Quarter         Units   Course
+  Aut2026       5       CS105
+  Win2027       5       CS106A
+
+3. I would change factor A to increase the number of total residents. The constraints are in play
+to ensure the health and well-being of the residents. Without them, they could become overworked and
+that would lead to medical errors that would harm patients. It is best to prioritize safety standards.

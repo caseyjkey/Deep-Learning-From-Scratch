@@ -1,0 +1,159 @@
+% This contents of this file will be inserted into the _Solutions version of the
+% output tex document.  Here's an example:
+
+% If assignment with subquestion (1.a) requires a written response, you will
+% find the following flag within this document: <SCPD_SUBMISSION_TAG>_1a
+% In this example, you would insert the LaTeX for your solution to (1.a) between
+% the <SCPD_SUBMISSION_TAG>_1a flags.  If you also constrain your answer between the
+% START_CODE_HERE and END_CODE_HERE flags, your LaTeX will be styled as a
+% solution within the final document.
+
+% Please do not use the '<SCPD_SUBMISSION_TAG>' character anywhere within your code.  As expected,
+% that will confuse the regular expressions we use to identify your solution.
+
+\def\assignmentnum{5 }
+\def\assignmentname{Course Scheduling}
+\def\assignmenttitle{XCS221 Assignment \assignmentnum --- \assignmentname}
+\input{macros}
+\begin{document}
+\pagestyle{myheadings} \markboth{}{\assignmenttitle}
+
+% <SCPD_SUBMISSION_TAG>_entire_submission
+
+This handout includes space for every question that requires a written response.
+Please feel free to use it to handwrite your solutions (legibly, please).  If
+you choose to typeset your solutions, the |README.md| for this assignment includes
+instructions to regenerate this handout with your typeset \LaTeX{} solutions.
+\ruleskip
+
+\LARGE
+0.a
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_0a
+\begin{answer}
+  % ### START CODE HERE ###
+For my CSP, I define a variable for each switch $X_1, \ldots, X_m$, where $X_i$ is the state of switch $i$. The domain of $X_i$ is $\{0, 1\}$ where $0 =$ off and $1 =$ on.
+
+\textbf{Constraints:}
+\begin{itemize}
+    \item We create one constraint for each light bulb $j$, where $j$ ranges from $1$ to $n$
+    \item Each light bulb starts as off ($0$)
+    \item A light is on if it has been toggled an odd number of times
+    \item Each lightbulb is an element of $T_j$, and it is controlled by a set of switches $X_j$
+    \item Scope: $\{X_i \mid i \in T_j\}$
+    \item Expression: $\left(\sum_{\{i : i \in T_j\}} X_i\right) \bmod 2 == 1$
+\end{itemize}
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_0a
+\clearpage
+
+\LARGE
+0.b
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_0b
+\begin{answer}
+  % ### START CODE HERE ###
+\textbf{i.} Two satisfying assignments: $(0,1,0)$ and $(1,0,1)$
+
+\textbf{ii.} Backtracking without forward checking:
+\begin{enumerate}
+    \item backtrack(\{\})
+    \item backtrack(\{$X_1: 0$\})
+    \item backtrack(\{$X_1: 0, X_3: 0$\}) \\
+    try $X_2$:
+    \begin{itemize}
+        \item try 0: $X_1 \oplus X_2 = 0$ (conflict)
+        \item try 1: $X_1 \oplus X_2 = 1$, $X_2 \oplus X_3 = 1$ \\
+        backtrack(\{$X_1: 0, X_3: 0, X_2: 1$\}) - solution: $(0, 1, 0)$
+    \end{itemize}
+    \item backtrack(\{$X_1: 0, X_3: 1$\}) \\
+    try $X_2$:
+    \begin{itemize}
+        \item try 0: $X_1 \oplus X_2 = 0$
+        \item try 1: $X_1 \oplus X_2 = 1$, $X_2 \oplus X_3 = 0$
+    \end{itemize}
+    \item backtrack(\{$X_1: 1$\})
+    \item backtrack(\{$X_1: 1, X_3: 0$\}) \\
+    try $X_2$:
+    \begin{itemize}
+        \item try 0: $X_1 \oplus X_2 = 1$
+        \item try 1: $X_1 \oplus X_2 = 0$, $X_2 \oplus X_3 = 0$
+    \end{itemize}
+    \item backtrack(\{$X_1: 1, X_3: 1$\}) \\
+    try $X_2$:
+    \begin{itemize}
+        \item try 0: $X_1 \oplus X_2 = 1$, $X_2 \oplus X_3 = 1$ \\
+        backtrack(\{$X_1: 1, X_3: 1, X_2: 0$\}) - solution: $(1, 0, 1)$
+    \end{itemize}
+\end{enumerate}
+
+\textbf{iii.} Backtracking with forward checking:
+\begin{enumerate}
+    \item backtrack(\{\})
+    \item backtrack(\{$X_1: 0$\}) \\
+    $X_2 \to \{1\}$
+    \item backtrack(\{$X_1: 0, X_3: 0$\}) \\
+    $X_2 \to \{1\}$ \\
+    backtrack(\{$X_1: 0, X_3: 0, X_2: 1$\}) - solution: $(0, 1, 0)$
+    \item backtrack(\{$X_1: 1$\}) \\
+    $X_2 \to \{0\}$
+    \item backtrack(\{$X_1: 1, X_3: 1$\}) \\
+    $X_2 \to \{0\}$ \\
+    backtrack(\{$X_1: 1, X_3: 1, X_2: 0$\}) - solution: $(1, 0, 1)$
+\end{enumerate}
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_0b
+\clearpage
+
+\LARGE
+2.d
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_2d
+\begin{answer}
+  % ### START CODE HERE ###
+Yes, my profile.txt generates a reasonable schedule. It abides by the max units counts and assigns a course for both quarters using my preferred courses.
+
+Profile.txt
+minUnits 3
+maxUnits 10
+
+register Aut2026
+register Win2027
+
+request CS106A
+request CS105
+request CS101
+
+Schedule
+
+Quarter         Units   Course
+
+  Aut2026       5       CS105
+  
+  Win2027       5       CS106A
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_2d
+\clearpage
+
+\LARGE
+3.a
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_3a
+\begin{answer}
+  % ### START CODE HERE ###
+I would change factor A to increase the number of total residents. The constraints are in play to ensure the health and well-being of the residents. Without them, they could become overworked and that would lead to medical errors that would harm patients. It is best to prioritize safety standards.
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_3a
+\clearpage
+
+% <SCPD_SUBMISSION_TAG>_entire_submission
+
+\end{document}

@@ -45,8 +45,28 @@ class ExactInference(object):
     ##################################################################################
 
     def observe(self, agentX, agentY, observedDist):
-        pass
         # ### START CODE HERE ###
+        # For each possible position of the tracked car, update belief based on observation
+        for row in range(self.belief.getNumRows()):
+            for col in range(self.belief.getNumCols()):
+                # Convert grid position to world coordinates
+                carX = util.colToX(col)
+                carY = util.rowToY(row)
+                
+                # Calculate true distance from agent to this position
+                trueDist = math.sqrt((carX - agentX)**2 + (carY - agentY)**2)
+                
+                # Calculate likelihood: probability of observing observedDist given trueDist
+                # Using Gaussian PDF with mean=trueDist and std=Const.SONAR_STD
+                likelihood = util.pdf(trueDist, Const.SONAR_STD, observedDist)
+                
+                # Apply Bayes' theorem: posterior ∝ prior × likelihood
+                prior = self.belief.getProb(row, col)
+                posterior = prior * likelihood
+                self.belief.setProb(row, col, posterior)
+        
+        # Normalize to ensure probabilities sum to 1
+        self.belief.normalize()
         # ### END CODE HERE ###
 
     ##################################################################################

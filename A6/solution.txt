@@ -1,0 +1,39 @@
+4. a. P(A|B) = P(B|A) * P(A) / P(B)
+P(B) = P(E1) is a constant so
+P(A|B) is proportional to P(B|A) * P(A)
+P(A|B) = P(C11, C12 | E1)
+P(A) = P(C11, C22) = p(c11) * p(c12) (cars move independently)
+
+P(B|A) = P(E1 | C11, C12)
+E1 = {e11, e12} K uniformaly random permutations
+K! = 2! = 2, each assignment of E1 has probability 1/2
+P(E1 | c11, c12) = 1/2[P(D11 = e11, D12 = e22 | c11, c12)] + 1/2[P(D11 = e12, D12 = e21 | c11, c12)]
+
+D11 and D12 are independent, D1i = True Distance + random noise
+P(D11 = e11 | c11) = pN(e11; ||a1 - c11||, σ^2)
+P(D12 = e12 | c12) = pN(e12; ||a1 - c12||, σ^2)
+
+P(E1 | c11, c12) = 1/2 * pN(e11; ||a1 - c11||, σ^2) * pN(e12; ||a1 - c12||, σ^2) + 1/2 * pN(e12; ||a1 - c11||, σ^2) * pN(e11; ||a1 - c12||, σ^2)
+P(C11 = c11, C12 = c12 | E1 = e1) is proportional to p(c11) * p(c12)[pN(e11; ||a1 - c11||, σ^2) * pN(e12; ||a1 - c12||, σ^2) + pN(e12; ||a1 - c11||, σ^2) * pN(e11; ||a1 - c12||, σ^2)]
+
+b.The number of assignments for all K cars that obtain the joint probability value is at least K! 
+because the initial beliefs of locations and the sensor readings are indistinuishible from one another
+so any assignment of cars to sensor readings which achieve maximum probability, each car can be rearranged to another sensor reading, resulting in K! rearrangements.
+
+c. The posterior distribution P(Et | Ct1, ..., CtK) includes factors involving all K car locations at each time step t.
+Even if we do the best variable elimination ordering, we will encounter a factor that depends on at least K car steps + 1 for the subsequent time step transition.
+If we eliminate that car we will get (K - 1) + 1 for it's time step transition for a total of K treewidth.
+
+5.a. Camera sensors on self-driving cars collect high-resolution data, including license plates and pedestrians' faces, which could be misused for unauthorized mass surveillance or state tracking of individuals' movements without their consent.
+This data could be aggregated into a centralized database to monitor political activists or sensitive locations, far exceeding the original intent of road safety.
+To prevent this, developers should implement on-device edge processing to automatically blur faces and license plates before any data is stored or transmitted.
+Furthermore, implementing strict data retention policies and privacy techniques can ensure that the output used for tracking cars cannot beused to extract personal information about the surrounding environment.
+c. If we knew the attacker was going to skew the gaussian of our observed distance variable we could apply the inverse to get a correct value.
+Otherwise we could also use sensor redudancy to confirm whether one sensor is compromised.
+d. The particleFilter simulation shows about half less tiles with probability mass compared to the exactInference simulation.
+This is because particleFilter removes low probability particles, which reduces the number of tiles with probability mass.
+e. I would balance this tradeoff by considering privacy and safety. Keeping the data on device is optimum
+for privacy as we don't have to trust that sensitive data will be masked or be deleted before it can be misused.
+However, sending the data to a central server allows for better processing and analysis of the data, which can improve safety.
+I would make a decision based on whether particle filtering could reach a threshold of accuracy comparable to exact inference,
+otherwise I would choose to use cloud compute after vetting the provider for best security and privacy practices.

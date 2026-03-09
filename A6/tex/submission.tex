@@ -32,8 +32,26 @@ instructions to regenerate this handout with your typeset \LaTeX{} solutions.
 
 % <SCPD_SUBMISSION_TAG>_4a
 \begin{answer}
-  % ### START CODE HERE ###
-  % ### END CODE HERE ###
+  % ### START CODE HERE %
+  P(A given B) = P(B given A) * P(A) / P(B) \\
+  P(B) = P(E1) is a constant so \\
+  P(A given B) is proportional to P(B given A) * P(A) \\
+  P(A given B) = P(C11, C12 given E1) \\
+  P(A) = P(C11, C12) = p(c11) * p(c12) (cars move independently) \\
+  
+  P(B given A) = P(E1 given C11, C12) \\
+  E1 = (e11, e12) K uniformly random permutations \\
+  K! = 2! = 2, each assignment of E1 has probability 1/2 \\
+  P(E1 given c11, c12) = 1/2(P(D11 = e11, D12 = e12 given c11, c12)) + 1/2(P(D11 = e12, D12 = e11 given c11, c12)) \\
+  
+  D11 and D12 are independent, D1i = True Distance + random noise \\
+  P(D11 = e11 given c11) = pN(e11; |a1 - c11|, sigma2) \\
+  P(D12 = e12 given c12) = pN(e12; |a1 - c12|, sigma2) \\
+  
+  P(E1 given c11, c12) = 1/2 * pN(e11; |a1 - c11|, sigma2) * pN(e12; |a1 - c12|, sigma2) + 1/2 * pN(e12; |a1 - c11|, sigma2) * pN(e11; |a1 - c12|, sigma2) \\
+  
+  P(C11 = c11, C12 = c12 given E1 = e1) is proportional to p(c11) * p(c12) (pN(e11; |a1 - c11|, sigma2) * pN(e12; |a1 - c12|, sigma2) + pN(e12; |a1 - c11|, sigma2) * pN(e11; |a1 - c12|, sigma2))
+  % ### END CODE HERE %
 \end{answer}
 % <SCPD_SUBMISSION_TAG>_4a
 \clearpage
@@ -44,8 +62,9 @@ instructions to regenerate this handout with your typeset \LaTeX{} solutions.
 
 % <SCPD_SUBMISSION_TAG>_4b
 \begin{answer}
-  % ### START CODE HERE ###
-  % ### END CODE HERE ###
+  % ### START CODE HERE %
+  The number of assignments for all K cars that obtain the joint probability value is at least K! because the initial beliefs of locations and the sensor readings are indistinguishable from one another, so any assignment of cars to sensor readings which achieve maximum probability, each car can be rearranged to another sensor reading, resulting in K! rearrangements.
+  % ### END CODE HERE %
 \end{answer}
 % <SCPD_SUBMISSION_TAG>_4b
 \clearpage
@@ -56,8 +75,9 @@ instructions to regenerate this handout with your typeset \LaTeX{} solutions.
 
 % <SCPD_SUBMISSION_TAG>_4c
 \begin{answer}
-  % ### START CODE HERE ###
-  % ### END CODE HERE ###
+  % ### START CODE HERE %
+  The posterior distribution P(Et given Ct1, ..., CtK) includes factors involving all K car locations at each time step t. Even if we do the best variable elimination ordering, we will encounter a factor that depends on at least K car steps + 1 for the subsequent time step transition. If we eliminate that car we will get (K - 1) + 1 for its time step transition for a total of K treewidth.
+  % ### END CODE HERE %
 \end{answer}
 % <SCPD_SUBMISSION_TAG>_4c
 \clearpage
@@ -69,8 +89,9 @@ instructions to regenerate this handout with your typeset \LaTeX{} solutions.
 
 % <SCPD_SUBMISSION_TAG>_5a
 \begin{answer}
-  % ### START CODE HERE ###
-  % ### END CODE HERE ###
+  % ### START CODE HERE %
+  Camera sensors on self-driving cars collect high-resolution data, including license plates and pedestrians' faces, which could be misused for unauthorized mass surveillance or state tracking of individuals' movements without their consent. This data could be aggregated into a centralized database to monitor political activists or sensitive locations, far exceeding the original intent of road safety. To prevent this, developers should implement on-device edge processing to automatically blur faces and license plates before any data is stored or transmitted. Furthermore, implementing strict data retention policies and privacy techniques can ensure that the output used for tracking cars cannot be used to extract personal information about the surrounding environment.
+  % ### END CODE HERE %
 \end{answer}
 % <SCPD_SUBMISSION_TAG>_5a
 \clearpage
@@ -81,8 +102,9 @@ instructions to regenerate this handout with your typeset \LaTeX{} solutions.
 
 % <SCPD_SUBMISSION_TAG>_5c
 \begin{answer}
-  % ### START CODE HERE ###
-  % ### END CODE HERE ###
+  % ### START CODE HERE %
+  If we knew the attacker was going to skew the gaussian of our observed distance variable we could apply the inverse to get a correct value. Otherwise we could also use sensor redundancy to confirm whether one sensor is compromised.
+  % ### END CODE HERE %
 \end{answer}
 % <SCPD_SUBMISSION_TAG>_5c
 \clearpage
@@ -93,8 +115,9 @@ instructions to regenerate this handout with your typeset \LaTeX{} solutions.
 
 % <SCPD_SUBMISSION_TAG>_5d
 \begin{answer}
-  % ### START CODE HERE ###
-  % ### END CODE HERE ###
+  % ### START CODE HERE %
+  The particleFilter simulation shows about half less tiles with probability mass compared to the exactInference simulation. This is because particleFilter removes low probability particles, which reduces the number of tiles with probability mass.
+  % ### END CODE HERE %
 \end{answer}
 % <SCPD_SUBMISSION_TAG>_5d
 \clearpage
@@ -105,8 +128,9 @@ instructions to regenerate this handout with your typeset \LaTeX{} solutions.
 
 % <SCPD_SUBMISSION_TAG>_5e
 \begin{answer}
-  % ### START CODE HERE ###
-  % ### END CODE HERE ###
+  % ### START CODE HERE %
+  I would balance this tradeoff by considering privacy and safety. Keeping the data on device is optimum for privacy as we don't have to trust that sensitive data will be masked or be deleted before it can be misused. However, sending the data to a central server allows for better processing and analysis of the data, which can improve safety. I would make a decision based on whether particle filtering could reach a threshold of accuracy comparable to exact inference, otherwise I would choose to use cloud compute after vetting the provider for best security and privacy practices.
+  % ### END CODE HERE %
 \end{answer}
 % <SCPD_SUBMISSION_TAG>_5e
 \clearpage

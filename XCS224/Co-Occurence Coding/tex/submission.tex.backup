@@ -1,0 +1,117 @@
+% This contents of this file will be inserted into the _Solutions version of the
+% output tex document.  Here's an example:
+
+% If assignment with subquestion (1.a) requires a written response, you will
+% find the following flag within this document: <SCPD_SUBMISSION_TAG>_1a
+% In this example, you would insert the LaTeX for your solution to (1.a) between
+% the <SCPD_SUBMISSION_TAG>_1a flags.  If you also constrain your answer between the
+% START_CODE_HERE and END_CODE_HERE flags, your LaTeX will be styled as a
+% solution within the final document.
+
+% Please do not use the '<SCPD_SUBMISSION_TAG>' character anywhere within your code.  As expected,
+% that will confuse the regular expressions we use to identify your solution.
+\def\assignmentnum{1 }
+\def\assignmentname{Exploring Word Embeddings}
+\def\assignmenttitle{XCS224N Assignment \assignmentnum \assignmentname}
+\input{macros}
+\begin{document}
+\pagestyle{myheadings} \markboth{}{\assignmenttitle}
+
+% <SCPD_SUBMISSION_TAG>_entire_submission
+
+This handout includes space for every question that requires a written response.
+Please feel free to use it to handwrite your solutions (legibly, please).  If
+you choose to typeset your solutions, the |README.md| for this assignment includes
+instructions to regenerate this handout with your typeset \LaTeX{} solutions.
+\ruleskip
+
+\LARGE
+4.a
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_4a
+\begin{answer}
+  % ### START CODE HERE ###
+
+$A$ is an m x n matrix
+r is the rank of matrix $A$ (linearly independent rows or columns)
+$\theta_i$ is the i-th singular value
+$u_i$ is the i-th left singular vector from orthonormal basis of R^m
+$v^T_i$ is the i-th right singular vector from orthonormal basis of R^n
+
+We can reach the equation in question by matrix multiplication.
+U * D scales each column in U by $\theta_i$ (theta_1*u_1, theta_2*u_2, ..., theta_r*u_r)
+Multipling that by V^T gives us the final result.
+theta_1*u_1*v^T_1 + theta_2*u_2*v^T_2 + ... + theta_r*u_r*v^T_r
+
+b. We can achieve this definition by following the previous summation
+To isolate $u_i$, we can multiply both sides by v_i
+$A$ * v_i = summation from j=1 to r of theta_j * u_j * v^T_j * v_i
+Since v is an orthonormal basis, v^T_j * v_i = 1 if j = i, and 0 otherwise
+Therefore, $A$ * v_i = $\theta_i$ * $u_i$
+Then we divide both sides by $\theta_i$ to get $u_i$ = (1/$\theta_i$) * $A$ * v_i
+
+c. From b we can see that $\theta_i$ * $u_i$ = $A$ * v_i
+Using that in the summation, we have $A_k$ = summation from i=1 to $k$ of ($A$*v_i)*$v^T_i$
+representing the projection of rows of $A$ onto the first $k$ right singular vectors.
+
+d. To show that $A_k$ minimizes \|$A$ - $B$\|_F^2 as $B$ for all $B$ of rank $k$, we can use the fact 
+that the closest point in a subspace to a matrix is its orthogonal projection onto that subspace.
+The projection of $A$ onto $V_k$, the best-fit subspace which minimizes error among all subspaces of dimension $k$, 
+produces $A_k$ which provides the smallest possible distance from $A$.
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_4a
+\clearpage
+
+\LARGE
+4.b
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_4b
+\begin{answer}
+  % ### START CODE HERE ###
+We can achieve this definition by following the previous summation
+To isolate $u_i$, we can multiply both sides by $v_i$
+$A * v_i = \sum_{j=1}^{r} \theta_j * u_j * v^T_j * v_i$
+Since v is an orthonormal basis, $v^T_j * v_i = 1$ if $j = i$, and 0 otherwise
+Therefore, $A * v_i = \theta_i * u_i$
+Then we divide both sides by $\theta_i$ to get $u_i = (1/\theta_i) * A * v_i$
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_4b
+\clearpage
+
+\LARGE
+4.c
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_4c
+\begin{answer}
+  % ### START CODE HERE ###
+From b we can see that $\theta_i * u_i = A * v_i$
+Using that in the summation, we have $A_k = \sum_{i=1}^{k} (A*v_i)*v^T_i$
+representing the projection of rows of $A$ onto the first $k$ right singular vectors.
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_4c
+\clearpage
+
+\LARGE
+4.d
+\normalsize
+
+% <SCPD_SUBMISSION_TAG>_4d
+\begin{answer}
+  % ### START CODE HERE ###
+To show that $A_k$ minimizes $\|A - B\|_F^2$ as $B$ for all $B$ of rank $k$, we can use the fact 
+that the closest point in a subspace to a matrix is its orthogonal projection onto that subspace.
+The projection of $A$ onto $V_k$, the best-fit subspace which minimizes error among all subspaces of dimension $k$, 
+produces $A_k$ which provides the smallest possible distance from $A$.
+  % ### END CODE HERE ###
+\end{answer}
+% <SCPD_SUBMISSION_TAG>_4d
+\clearpage
+
+% <SCPD_SUBMISSION_TAG>_entire_submission
+\end{document}

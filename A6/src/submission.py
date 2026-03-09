@@ -49,18 +49,13 @@ class ExactInference(object):
         # For each possible position of the tracked car, update belief based on observation
         for row in range(self.belief.getNumRows()):
             for col in range(self.belief.getNumCols()):
-                # Convert grid position to world coordinates
                 carX = util.colToX(col)
                 carY = util.rowToY(row)
                 
-                # Calculate true distance from agent to this position
                 trueDist = math.sqrt((carX - agentX)**2 + (carY - agentY)**2)
-                
-                # Calculate likelihood: probability of observing observedDist given trueDist
-                # Using Gaussian PDF with mean=trueDist and std=Const.SONAR_STD
                 likelihood = util.pdf(trueDist, Const.SONAR_STD, observedDist)
                 
-                # Apply Bayes' theorem: posterior ∝ prior × likelihood
+                # Apply bayes theorem
                 prior = self.belief.getProb(row, col)
                 posterior = prior * likelihood
                 self.belief.setProb(row, col, posterior)
@@ -90,6 +85,23 @@ class ExactInference(object):
     def elapseTime(self):
         if self.skipElapse: return ### ONLY FOR THE GRADER TO USE IN Problem 2
         # ### START CODE HERE ###
+        newBelief = util.Belief(self.belief.getNumRows(), self.belief.getNumCols(), 0.0)
+        
+        for oldRow in range(self.belief.getNumRows()):
+            for oldCol in range(self.belief.getNumCols()):
+                oldTile = (oldRow, oldCol)
+                oldProb = self.belief.getProb(oldRow, oldCol)
+                if oldProb == 0:
+                    continue
+                                
+                
+                for (oldTileKey, newTile), transProb in self.transProb.items():
+                    if oldTileKey == oldTile:
+                        newRow, newCol = newTile
+                        newBelief.addProb(newRow, newCol, oldProb * transProb)
+        
+        self.belief = newBelief
+        self.belief.normalize()
         # ### END CODE HERE ###
 
     # Function: Get Belief
@@ -184,6 +196,28 @@ class ParticleFilter(object):
     ##################################################################################
     def observe(self, agentX, agentY, observedDist):
         # ### START CODE HERE ###
+        weightedParticles = collections.defaultdict(float)
+        
+        for (row, col), count in self.particles.items():
+            carX = util.colToX(col)
+            carY = util.rowToY(row)
+            
+            trueDist = math.sqrt((carX - agentX) ** 2 + (carY - agentY) ** 2)
+            
+            # emission probability via gaussian
+            emissionProb = util.pdf(trueDist, Const.SONAR_STD, observedDist)
+            
+            weightedParticles[(row, col)] = count * emissionProb
+        
+        # Step 2
+        newParticles = collections.defaultdict(int)
+        
+        for _ in range(self.NUM_PARTICLES):
+            newParticle = util.weightedRandomChoice(weightedParticles)
+            newParticles[newParticle] += 1
+        
+        # Update particles with new distribution
+        self.particles = newParticles
         # ### END CODE HERE ###
 
         self.updateBelief()
@@ -212,8 +246,23 @@ class ParticleFilter(object):
     # - You should NOT call self.updateBelief() at the end of this function.
     ##################################################################################
     def elapseTime(self):
-        pass
         # ### START CODE HERE ###
+        newParticles = collections.defaultdict(int)
+        
+        for tile in self.particles:
+            count = self.particles[tile]
+            
+            # sample next position for each particle
+            for _ in range(count):
+                if tile in self.transProbDict:
+                    newTile = util.weightedRandomChoice(self.transProbDict[tile])
+                    newParticles[newTile] += 1
+                
+                #else:
+                    # newParticles[tile] += 1
+        
+        # set new distribution
+        self.particles = newParticles
         # ### END CODE HERE ###
 
     # Function: Get Belief
@@ -261,8 +310,27 @@ class ExactInferenceWithSensorDeception(ExactInference):
     ##################################################################################
 
     def observe(self, agentX: int, agentY: int, observedDist: float):
-        pass
         # ### START CODE HERE ###
+        transform = 1.0 / (1.0 + self.skewness**2)
+        sqrt = math.sqrt(2.0 * transform)
+        transformedDist = transform * observedDist + sqrt
+        
+        for row in range(self.belief.getNumRows()):
+            for col in range(self.belief.getNumCols()):
+                carX = util.colToX(col)
+                carY = util.rowToY(row)
+                
+                trueDist = math.sqrt((carX - agentX)**2 + (carY - agentY)**2)
+                
+                likelihood = util.pdf(trueDist, Const.SONAR_STD, transformedDist)
+                
+                # Apply bayes theorem
+                prior = self.belief.getProb(row, col)
+                posterior = prior * likelihood
+                self.belief.setProb(row, col, posterior)
+        
+        # sum to 1
+        self.belief.normalize()
         # ### END CODE HERE ###
 
     def elapseTime(self):
